@@ -33,4 +33,17 @@ cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh la
 # Testing
 ```
 host -t ns domain.com
+whois domain.com
+```
+
+# Other
+```
+screen -ls 
+screen -r screen id 
+screen -rd
+tail -f /var/log/cpanel-install.log
+netstat -tulpn
+SELINUX=disabled
+SELINUXTYPE=targeted
+iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
 ```
