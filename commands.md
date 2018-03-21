@@ -18,16 +18,33 @@ chkconfig ipchains off
 chkconfig iptables off
 
 sudo firewall-cmd --list-all
-sudo firewall-cmd --zone=public --add-service=http
-sudo firewall-cmd --zone=public --add-service=https
-sudo firewall-cmd --zone=public --add-service=ftp
-sudo firewall-cmd --zone=public --add-service=smtp
-sudo firewall-cmd --zone=public --add-service=smtps
-sudo firewall-cmd --zone=public --add-service=dns
+sudo firewall-cmd --zone=public --permanent --add-service=http
+sudo firewall-cmd --zone=public --permanent --add-service=https
+sudo firewall-cmd --zone=public --permanent --add-service=ftp
+sudo firewall-cmd --zone=public --permanent --add-service=smtp
+sudo firewall-cmd --zone=public --permanent --add-service=smtps
+sudo firewall-cmd --zone=public --permanent --add-service=dns
 sudo firewall-cmd --zone=public --permanent --add-port=53/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=25/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2087/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2083/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2089/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2096/tcp
+
+sudo firewall-cmd --reload
+sudo systemctl restart network
+sudo systemctl reload firewalld
 
 cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh latest
+```
+
+# DNS Resolvers
+```
+199.101.134.121
+208.88.224.54
+8.8.8.8
+8.8.4.4
+
 ```
 
 # Testing
