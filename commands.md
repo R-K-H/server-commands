@@ -4,6 +4,9 @@ Source for some
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
 - https://docs.oracle.com/cd/E20815_01/html/E20821/gisry.html
 
+# Physical Needs
+Contact hosting and request opening of port 25 for sending emails.
+
 # Code
 ```
 hostname server.domain.com
@@ -25,4 +28,9 @@ sudo firewall-cmd --zone=public --permanent --add-port=53/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=25/tcp
 
 cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh latest
+```
+
+# Testing
+```
+host -t ns domain.com
 ```
