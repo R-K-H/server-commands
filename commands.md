@@ -3,6 +3,7 @@ Source for some
 
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
 - https://docs.oracle.com/cd/E20815_01/html/E20821/gisry.html
+- https://forums.cpanel.net/threads/cpanel-license-activation-issue.97409/
 
 # Physical Needs
 Contact hosting and request opening of port 25 for sending emails.
@@ -36,12 +37,15 @@ sudo systemctl restart network
 sudo systemctl reload firewalld
 
 cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh latest
+
+/usr/local/cpanel/cpkeyclt
 ```
 
 # DNS Resolvers
 ```
 199.101.134.121
 208.88.224.54
+108.61.10.10
 8.8.8.8
 8.8.4.4
 
