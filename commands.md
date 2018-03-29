@@ -67,4 +67,10 @@ netstat -tulpn
 SELINUX=disabled
 SELINUXTYPE=targeted
 iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 3030 -j ACCEPT
+sudo service iptables save
+
+if ("$h_from:" contains "")
+then fail
+endif
 ```
