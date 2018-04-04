@@ -4,6 +4,7 @@ Source for some
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
 - https://docs.oracle.com/cd/E20815_01/html/E20821/gisry.html
 - https://forums.cpanel.net/threads/cpanel-license-activation-issue.97409/
+- https://forums.cpanel.net/threads/add-a-global-mail-filter-for-whm-and-accounts.55504/
 
 # Physical Needs
 Contact hosting and request opening of port 25 for sending emails.
@@ -55,6 +56,9 @@ cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh la
 ```
 host -t ns domain.com
 whois domain.com
+telnet domain.com 25
+nc domain.com 25
+netstat -tulpn
 ```
 
 # Other
@@ -63,14 +67,37 @@ screen -ls
 screen -r screen id 
 screen -rd
 tail -f /var/log/cpanel-install.log
-netstat -tulpn
+
 SELINUX=disabled
 SELINUXTYPE=targeted
 iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 3030 -j ACCEPT
 sudo service iptables save
+```
 
-if ("$h_from:" contains "")
-then fail
+# Links
+Remove IP from banned office emails
+- https://sender.office.com/
+
+# File Changes
+```
+touch /var/log/filter.log
+chown mailnull:mail
+chmod go+rw /var/log/filter.log
+
+perl -0777 -i.original -pe 's/if error_message and \$header_from: contains "Mailer-Daemon@"\nthen\n  finish\nendif/\# Special config to remove errors\nlogfile \/var\/log\/filter.log 0644\nif (\n  \$header_from: contains "Mailer-Daemon@" or\n  \$header_from: contains "Mail Delivery System" or\n  \$message_body: contains "" or\n  \$message_body: contains "protection.outlook.com"\n)\nthen\n  logwrite "\$tod_log \$message_id from \$sender_address contained blocked keywords or email addresses"\n  seen finish\nendif/igs' /etc/cpanel_exim_system_filter
+
+
+# Special config to remove error messages
+logfile /var/log/filter.log 0644
+if (
+	$header_from: contains "Mailer-Daemon@" or
+	$header_from: contains "Mail Delivery System" or
+	$message_body: contains "" or
+	$message_body: contains "protection.outlook.com"
+	)
+then 
+	logwrite "$tod_log $message_id from $sender_address contained blocked keywords or email addresses"
+	seen finish
 endif
 ```
