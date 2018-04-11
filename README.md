@@ -89,11 +89,15 @@ sudo service iptables save
 # Links
 Remove IP from banned office emails
 - https://sender.office.com/
+Other
+sbl-removals@spamhaus.org
+- https://www.spamhaus.org/lookup/
+Get ticket number from site
 
 # File Changes
 ```
 touch /var/log/filter.log
-chown mailnull:mail
+chown mailnull:mail /var/log/filter.log
 chmod go+rw /var/log/filter.log
 
 perl -0777 -i.original -pe 's/if error_message and \$header_from: contains "Mailer-Daemon@"\nthen\n  finish\nendif/\# Special config to remove errors\nlogfile \/var\/log\/filter.log 0644\nif (\n  \$header_from: contains "Mailer-Daemon@" or\n  \$header_from: contains "Mail Delivery System" or\n  \$message_body: contains "" or\n  \$message_body: contains "protection.outlook.com"\n)\nthen\n  logwrite "\$tod_log \$message_id from \$sender_address contained blocked keywords or email addresses"\n  seen finish\nendif/igs' /etc/cpanel_exim_system_filter
@@ -112,6 +116,18 @@ then
 	seen finish
 endif
 ```
+
+# Message Queue
+```
+systemctl stop chkservd
+systemctl stop exim
+/usr/sbin/exiqgrep -i | xargs /usr/sbin/exim -Mrm
+systemctl start exim
+systemctl start chkservd
+
+exim -Mvh
+```
+
 
 # Restart
 ```
