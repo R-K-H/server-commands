@@ -11,7 +11,7 @@ Contact hosting and request opening of port 25 for sending emails.
 
 # Code
 ```
-hostname server.domain.com
+hostname domain.com
 
 service ipchains stop
 service iptables stop
@@ -27,6 +27,7 @@ sudo firewall-cmd --zone=public --permanent --add-service=smtp
 sudo firewall-cmd --zone=public --permanent --add-service=smtps
 sudo firewall-cmd --zone=public --permanent --add-service=dns
 sudo firewall-cmd --zone=public --permanent --add-port=53/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=53/udp
 sudo firewall-cmd --zone=public --permanent --add-port=25/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=2087/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=2083/tcp
@@ -76,7 +77,7 @@ tail -f /var/log/cpanel-install.log
 
 SELINUX=disabled
 SELINUXTYPE=targeted
-iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 53 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 3030 -j ACCEPT
 sudo service iptables save
 
@@ -135,3 +136,18 @@ systemctl restart exim.service
 /etc/rc.d/init.d/exim restart
 /usr/local/cpanel/scripts/restartsrv_exim
 ```
+
+# Fix Email
+
+Confirm the domain exists in /etc/localdomains
+Repair permissions
+Routing test
+Ensure DNS is setup
+
+# Check IP Banned
+```
+http://multirbl.valli.org/
+https://mxtoolbox.com/
+```
+
+https://vijeshrajan143.wordpress.com/2012/09/18/reverse-dns-spf-record/
